@@ -1,0 +1,47 @@
+<div class="row mt-3 me-2">
+    <div class="col-2 index-cooks-container offset-1 shadow">
+        <h5 class="fw-bold text-center text-white top-title">Top 10 Rated Cooks</h5>
+        <% @cooks.each do |cook| %> 
+            <div class="card text-bg-dark my-card mb-3 d-flex">
+                <%= image_tag cook.profile_img_url, class:"card-img my-card-img" %>
+                <div class="card-img-overlay d-flex flex-column justify-content-end float-text">
+                    <h5 class="card-title text-dark align-self-bottom mx-auto cook-card-title"><%= link_to cook.username, user_path(cook), class:"text-white fw-bold text-capitalize"%></h5>
+                    <p class="starability-result align-self-bottom mx-auto" data-rating="<%= cook.cook_rating.to_i %>">Rating: </p>
+                </div>
+            </div>
+
+        <% end %> 
+    </div>
+
+    <div class="flex-container col-9  d-flex justify-content-center m-0">
+         
+        <% @meals.each do |meal| %>
+            <div class="item-container m-3">
+            
+                <div class="card m3 index-card h-100">
+                   <%= image_tag meal.img_url, class:"card-img-top" %>
+                    <div class="card-body">
+                        <div class="mb-1 d-flex justify-content-center">
+                        <h4><%= link_to meal.title, meal_path(meal), class:"title-list-item text-dark fw-bold"%></h4>
+                        </div>
+                        <div class="mb-1 index-chef d-flex justify-content-center">
+                         <p class="text-dark">Cook: <%= link_to meal.user.username, user_path(meal.user), class:"text-dark"%></p>
+                        </div>
+                        <div >
+                        <div class="d-flex justify-content-center align-items-center">
+                            <p class="starability-result me-2" data-rating="<%= meal.reviews.average(:rating).to_i %>"></p>
+                            
+                            <p><%= pluralize(meal.reviews.count, "review") %></p>
+                        </div>
+                        <p><%= meal.description %></p>
+                        <p class="fw-bold"><%= number_to_currency(meal.price, precision: 2)%></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <% end %>
+        </div>
+</div>
+
+
+

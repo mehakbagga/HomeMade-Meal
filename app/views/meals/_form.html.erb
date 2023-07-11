@@ -1,0 +1,58 @@
+
+        <%= form_with model: @meal, data:{ turbo:false } do |form| %>
+          <% if @meal.errors.any? %>
+          <div class="alert alert-danger">
+            <h5><%= pluralize(@meal.errors.count, "error") %> prohibited this meal from being saved:</h5>
+            <ul class="m-0">
+            <% @meal.errors.each do |error|%>
+              <li><%= error.full_message%></li>
+            <% end %>
+            </ul>
+          </div>
+          <% end %>
+          <div class="form-outline mb-4">
+            <%= form.label :title %>
+            <%= form.text_field :title, class:"form-control" %>
+          </div>
+          <div class="form-outline mb-4">
+            <%= form.label :Image_URL %>
+            <%= form.url_field :img_url, class:"form-control" %>
+          </div>
+          <div class="form-outline mb-4">
+            <%= form.label :description %>
+            <%= form.text_area :description, cols:20, rows: 3, class:"form-control"%>
+          </div>
+          <div class="form-outline mb-4">
+            <%= form.label :ingredients %>
+            <%= form.text_area :ingredient_names, cols:20, rows: 2, class:"form-control"%>
+          </div>
+          <div class="form-outline mb-4">
+            <%= form.label :price %>
+            <%= form.number_field :price, class:"form-control" %>
+          </div>
+          <div class="d-flex justify-content-center">
+            <%= form.submit class:"btn btn-dark btn-block btn-lg gradient-custom-4"%>
+          </div>
+        <% end %>
+
+<script>
+  <%# selectize doc:
+    https://github.com/selectize/selectize.js/blob/master/docs/usage.md
+    %>
+    $(function() {
+        $('#meal_ingredient_name').selectize({
+            delimeter: ",",
+            persist: false,
+            labelField: "name", //Column name in database
+            valueField: "name",
+            searchField: "name",
+            options: <% Ingredient.select(:name).to_json(except: [:id]).html_safe %>,
+            create: function(input){
+                return{
+                    name: input
+                }
+            }
+        });
+    });
+
+</script>

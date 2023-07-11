@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Delish - Delicious Homemade Meals</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    <!-- CSS only -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+    <%= stylesheet_link_tag "stars", "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
+    <%# Google Font %>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300&display=swap" rel="stylesheet">
+    <%# Website Icon %>
+    <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/1249/1249623.png?w=740&t=st=1659576712~exp=1659577312~hmac=dc34fb451a33ca2ac4436539d1286c344439758b06b7303f091b97e646e43b0a" />
+  </head>
+
+  <body>
+     <div class="container-fluid" id="banner">
+        <nav class="navbar navbar-expand-lg navbar-light">
+           <div class="container-fluid d-flex p-0">
+
+            <div class="container">
+              <a class="m-3" alt="brand-logo" href="<%= main_app.root_path %>">
+              <%= image_tag "https://cdn-icons-png.flaticon.com/512/1249/1249623.png?w=740&t=st=1659576712~exp=1659577312~hmac=dc34fb451a33ca2ac4436539d1286c344439758b06b7303f091b97e646e43b0a", id: 'logo', style:"width: 3rem"%> 
+              </a>
+              <a class="navbar-brand fw-bold fw-bold" href="<%= main_app.root_path %>">Delish</a>
+
+            </div>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navtoggler" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+            </button>
+
+
+
+            <div class="collapse navbar-collapse" id="navtoggler" >
+            <%# Search bar %>
+            <div class="container mr-5" style="width: 25em">
+              <%= render 'searches/form' %>
+            </div>
+              <ul class="navbar-nav d-flex flex-row align-items-baseline" style="width: 20em">
+              
+                <% if user_signed_in? %>
+                <li class="nav-item m-1">
+                  <a class="nav-link text-dark" href="<%= main_app.meals_path %>">Meals</a>
+                </li>
+                <li class="nav-item m-1">
+                  <a class="nav-link position-relative" href="<%= main_app.show_admin_panel_user_path(current_user.id) %>">
+                    <%if Notification.unread_count(current_user) != 0%>
+                        <span class="position-absolute top-10 start-100 translate-middle badge rounded-pill bg-danger">
+                          <%=Notification.unread_count(current_user)%>
+                        <span class="visually-hidden">unread messages</span>
+                      </span>
+                    <% end %>
+                    Hello <%= current_user.username %>
+                  </a>
+              </li>
+              <li class="nav-item m-1 ms-2">
+                <%= button_to "Log out", main_app.session_path, method: :delete, class: "btn btn-danger" %>
+              </li>
+                <% else %>
+                <%# Sign In & Sign Up %>
+                <li class="nav-item m-1">
+                  <a class="nav-link text-dark fw-bold" href="<%= main_app.meals_path %>">Meals</a>
+                </li>
+                <li class="nav-item">
+                    <a class="btn btn-light-outline nav-link text-dark fw-bold" href="<%= main_app.new_session_path %>">Sign In</a>
+                </li>
+                <li class="nav-item mx-2">
+                    <a class="btn btn-light-outline nav-link text-dark fw-bold" href="<%= main_app.new_user_path %>">Sign Up</a>
+                </li>
+                <% end %>
+              </ul>
+            </div>
+          </div>
+        </nav>
+      </div>
+
+      <div class="container">
+        <% flash.each do |type, message| %>
+              <% if type == "notice"%>
+                <div class="alert alert-info" role="alert">
+                  <%= message %>
+                </div>
+              <% else %>
+                  <div class="alert alert-danger" role="alert">
+                  <%= message %>
+                </div>
+              <% end %>
+            <% end %>
+      </div>
+
+    <%= yield %>
+
+   <footer class="bg-dark">
+        <div class="container text-center">
+            <div class="row d-flex justify-content-center p-2">
+                <div class="col-lg-3 col-md-6 col-sm-12">
+                            <%= image_tag "https://cdn-icons-png.flaticon.com/512/1249/1249623.png?w=740&t=st=1659576712~exp=1659577312~hmac=dc34fb451a33ca2ac4436539d1286c344439758b06b7303f091b97e646e43b0a", id: 'logo-footer', class: "mt-3", style:"width: 3rem"%> 
+                    <h2 class="text-light fw-bold mt-3">Delish</h2>
+                    
+                </div>
+            </div>
+            <div class="row d-flex justify-content-center p-2">
+                    <div class="col-lg-3 col-md-6 col-sm-12 text-light">
+                    <h4 class="mt-3 text-light fw-bold">Contact Us</h1>
+                    <p class="text-light">8888 Franklin St, Vancouver, BC.</p>
+                    <p><a class="text-light" href="mailto:hello@delish.ca">hello@delish.ca</a></p>
+                    <p><a class="text-light" href="tel:1-800-888-8888">1-800-888-8888</a></p>
+                </div>
+            </div>
+            <div class="row">
+            <p class="text-light text-center">© 2022 Delish. All rights reserved.</p></div>
+        </div>
+    </footer>
+   <!-- JavaScript Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
+  </body>
+</html>
